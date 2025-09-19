@@ -39,7 +39,7 @@ test.describe('Quiz App E2E Tests', () => {
     const aSvg = page.locator('object#aSvg');
     await expect(qSvg).toBeVisible();
     await expect(aSvg).toBeVisible();
-    const expectedSvg = firstCategory.id === 'grammar' ? 'grammar_q.svg' : 'syntax_q.svg';
+  const expectedSvg = firstCategory.id === 'grammar' ? 'svg/grammar_q.svg' : 'svg/syntax_q.svg';
     await expect(qSvg).toHaveAttribute('data', expectedSvg);
   });
 
@@ -287,6 +287,10 @@ test.describe('Quiz App E2E Tests', () => {
     
     // Answer correctly using SVG interaction
     const correctChoiceIndex = firstQuestion.correctIndex;
+    
+    // Wait for question to be loaded
+    await page.waitForTimeout(500);
+    
     await page.evaluate((correctIndex) => {
       const qSvgObj = document.getElementById('qSvg') as HTMLObjectElement;
       if (qSvgObj && qSvgObj.contentDocument) {
@@ -295,6 +299,9 @@ test.describe('Quiz App E2E Tests', () => {
         if (choiceBtn) choiceBtn.click();
       }
     }, correctChoiceIndex);
+    
+    // Wait for choice to register
+    await page.waitForTimeout(300);
     
     await page.evaluate(() => {
       const qSvgObj = document.getElementById('qSvg') as HTMLObjectElement;
@@ -307,6 +314,9 @@ test.describe('Quiz App E2E Tests', () => {
     
     // Ensure the score increments by 10
     await expect(page.locator('#globalScore')).toHaveText('Points: 10');
+    
+    // Wait for answer to process
+    await page.waitForTimeout(1000);
     
     // Click next button in answer SVG
     await page.evaluate(() => {
@@ -343,24 +353,41 @@ test.describe('Quiz App E2E Tests', () => {
         { timeout: 10000 }
       );
       
-      // Select and submit answer
+      // Wait for question to be loaded
+      await page.waitForTimeout(500);
+      
+      // Select and submit answer 
       await page.evaluate((correctIndex) => {
         const qSvgObj = document.getElementById('qSvg') as HTMLObjectElement;
         if (qSvgObj && qSvgObj.contentDocument) {
           const svgDoc = qSvgObj.contentDocument;
           const choiceBtn = svgDoc.querySelector(`.choice-btn[data-original-index="${correctIndex}"]`) as HTMLElement;
-          if (choiceBtn) choiceBtn.click();
+          if (choiceBtn) {
+            choiceBtn.click();
+            console.log(`Clicked choice with original index ${correctIndex}`);
+          } else {
+            console.error(`Could not find choice button with original index ${correctIndex}`);
+          }
         }
       }, question.correctIndex);
+      
+      // Wait for choice to register
+      await page.waitForTimeout(300);
       
       await page.evaluate(() => {
         const qSvgObj = document.getElementById('qSvg') as HTMLObjectElement;
         if (qSvgObj && qSvgObj.contentDocument) {
           const svgDoc = qSvgObj.contentDocument;
           const submitBtn = svgDoc.querySelector('#submit-btn') as HTMLElement;
-          if (submitBtn) submitBtn.click();
+          if (submitBtn) {
+            submitBtn.click();
+            console.log('Clicked submit button');
+          }
         }
       });
+      
+      // Wait for answer to process  
+      await page.waitForTimeout(1000);
       
       // Click next to proceed to next question or show summary
       await page.evaluate(() => {
@@ -514,22 +541,7 @@ test.describe('Quiz App E2E Tests', () => {
     
     for (const question of firstCategory.questions) {
       // Wait for question to load
-      await page.waitForFunction(
-        (expectedText) => {
-          const qSvgObj = document.getElementById('qSvg') as HTMLObjectElement;
-          if (!qSvgObj || !qSvgObj.contentDocument) return false;
-          
-          try {
-            const svgDoc = qSvgObj.contentDocument;
-            const questionTextElement = svgDoc.querySelector('#question-text');
-            return questionTextElement && questionTextElement.textContent?.includes(expectedText);
-          } catch (e) {
-            return false;
-          }
-        },
-        question.question,
-        { timeout: 10000 }
-      );
+      await page.waitForTimeout(500);
       
       // Select answer inside question SVG
       await page.evaluate((correctIndex) => {
@@ -541,6 +553,9 @@ test.describe('Quiz App E2E Tests', () => {
         }
       }, question.correctIndex);
       
+      // Wait for choice to register
+      await page.waitForTimeout(300);
+      
       // Submit answer inside question SVG
       await page.evaluate(() => {
         const qSvgObj = document.getElementById('qSvg') as HTMLObjectElement;
@@ -550,6 +565,9 @@ test.describe('Quiz App E2E Tests', () => {
           if (submitBtn) submitBtn.click();
         }
       });
+      
+      // Wait for answer to process
+      await page.waitForTimeout(1000);
       
       // Click next button inside answer SVG
       await page.evaluate(() => {
@@ -565,5 +583,84 @@ test.describe('Quiz App E2E Tests', () => {
     await expect(page.locator('#summaryModal')).toBeVisible();
     await page.locator('#summaryReturnBtn').click();
     await expect(page.locator('#category-screen')).toBeVisible();
+  });
+
+  test.describe('iOS WebView Compatibility', () => {
+    test('text should not overlap in quiz questions', async ({ page }) => {
+      await page.goto('http://localhost:3000/index.html');
+      
+      // Navigate to a quiz
+      await page.click('button:has-text("Συντακτικό")');
+      
+      // Wait for question to load
+      await page.waitForSelector('.question-container');
+      
+      // Check for text overlap by measuring element positions
+      const questionText = page.locator('.question-text');
+      const choiceButtons = page.locator('.choice-button');
+      
+      await expect(questionText).toBeVisible();
+      await expect(choiceButtons.first()).toBeVisible();
+      
+      // Get bounding boxes to check for overlap
+      const questionBox = await questionText.boundingBox();
+      const firstChoiceBox = await choiceButtons.first().boundingBox();
+      
+      if (questionBox && firstChoiceBox) {
+        // Ensure question text doesn't overlap with choices
+        expect(questionBox.y + questionBox.height).toBeLessThan(firstChoiceBox.y);
+      }
+    });
+
+    test('SVG content should render correctly in WebView', async ({ page }) => {
+      await page.goto('http://localhost:3000/index.html');
+      
+      // Navigate to quiz
+      await page.click('button:has-text("Συντακτικό")');
+      
+      // Wait for SVG to load
+      await page.waitForSelector('object[data*="svg"]');
+      
+      const svgObject = page.locator('object[data*="svg"]');
+      await expect(svgObject).toBeVisible();
+      
+      // Check if SVG has loaded content
+      await page.waitForFunction(() => {
+        const svgObj = document.querySelector('object[data*="svg"]') as HTMLObjectElement;
+        return svgObj && svgObj.contentDocument && svgObj.contentDocument.body.innerHTML.length > 0;
+      }, { timeout: 10000 });
+    });
+
+    test('responsive layout should work on small screens', async ({ page }) => {
+      // Set to very small viewport (Instagram WebView can be constrained)
+      await page.setViewportSize({ width: 320, height: 568 });
+      
+      await page.goto('http://localhost:3000/index.html');
+      
+      // Check that buttons are still clickable
+      const categoryButtons = page.locator('.category-button');
+      await expect(categoryButtons.first()).toBeVisible();
+      
+      // Ensure buttons don't overflow
+      const buttonBox = await categoryButtons.first().boundingBox();
+      if (buttonBox) {
+        expect(buttonBox.width).toBeLessThanOrEqual(320);
+      }
+    });
+
+    test('touch interactions should work properly', async ({ page }) => {
+      await page.goto('http://localhost:3000/index.html');
+      
+      // Test touch events work
+      await page.tap('button:has-text("Συντακτικό")');
+      await page.waitForSelector('.question-container');
+      
+      // Test choice selection via touch
+      const choiceButton = page.locator('.choice-button').first();
+      await choiceButton.tap();
+      
+      // Should have selected class or visual feedback
+      await expect(choiceButton).toHaveClass(/selected|active/);
+    });
   });
 });

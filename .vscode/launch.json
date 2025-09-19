@@ -1,0 +1,44 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Start Static Server (npx serve)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-s", ".", "-l", "3000"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "autoAttachChildProcesses": false,
+      "env": {
+        "NODE_OPTIONS": ""
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Open App in Chrome",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "userDataDir": false
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Open index.html directly (File Protocol)",
+      "file": "${workspaceFolder}/index.html",
+      "webRoot": "${workspaceFolder}"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Serve and Open in Chrome",
+      "configurations": [
+        "Start Static Server (npx serve)",
+        "Open App in Chrome"
+      ],
+      "stopAll": true
+    }
+  ]
+}

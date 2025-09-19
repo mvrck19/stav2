@@ -132,11 +132,11 @@ function startCategory(id) {
         aSvg.addEventListener('load', onSvgLoad, { once: true });
         setTimeout(() => {
             if (cat.id === 'grammar') {
-                qSvg.setAttribute('data', 'grammar_q.svg');
-                aSvg.setAttribute('data', 'grammar_a.svg');
             } else if (cat.id === 'syntax') {
-                qSvg.setAttribute('data', 'syntax_q.svg');
-                aSvg.setAttribute('data', 'syntax_a.svg');
+                qSvg.setAttribute('data', 'svg/grammar_q.svg');
+                aSvg.setAttribute('data', 'svg/grammar_a.svg');
+                qSvg.setAttribute('data', 'svg/syntax_q.svg');
+                aSvg.setAttribute('data', 'svg/syntax_a.svg');
             }
             setTimeout(() => {
                 checkSvgLoaded(qSvg);
