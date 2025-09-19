@@ -4,7 +4,10 @@
   "description": "",
   "main": "quiz-app.js",
   "scripts": {
-    "dev": "npx serve -s . -p 3000",
+    "build": "npm run build-css-prod",
+    "build-css": "tailwindcss -i ./src/input.css -o ./dist/styles.css --watch",
+    "build-css-prod": "tailwindcss -i ./src/input.css -o ./dist/styles.css --minify",
+    "dev": "npm run build-css-prod && npx serve -s . -p 3000",
     "start": "npx serve -s . -p 3000",
     "test": "npx playwright test",
     "test:ui": "npx playwright test --ui"
@@ -23,7 +26,10 @@
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@types/node": "^24.5.1",
+    "autoprefixer": "^10.4.21",
     "playwright": "^1.55.0",
-    "serve": "^14.2.5"
+    "postcss": "^8.5.6",
+    "serve": "^14.2.5",
+    "tailwindcss": "^3.4.17"
   }
 }

@@ -4,7 +4,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Start Static Server (npx serve)",
+      "name": "Start Static Server (Production)",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", "-s", ".", "-l", "3000"],
       "cwd": "${workspaceFolder}",
@@ -13,7 +13,23 @@
       "autoAttachChildProcesses": false,
       "env": {
         "NODE_OPTIONS": ""
-      }
+      },
+      "preLaunchTask": "Build Tailwind CSS (Production)"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Start Development Server (with CSS Watch)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-s", ".", "-l", "3000"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "autoAttachChildProcesses": false,
+      "env": {
+        "NODE_OPTIONS": ""
+      },
+      "preLaunchTask": "Build Tailwind CSS (Watch)"
     },
     {
       "type": "chrome",
@@ -28,14 +44,43 @@
       "request": "launch",
       "name": "Open index.html directly (File Protocol)",
       "file": "${workspaceFolder}/index.html",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Build Tailwind CSS (Production)"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Tests",
+      "program": "${workspaceFolder}/node_modules/.bin/playwright",
+      "args": ["test"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "preLaunchTask": "Build Tailwind CSS (Production)"
+    },
+    {
+      "type": "node", 
+      "request": "launch",
+      "name": "Run Tests (UI Mode)",
+      "program": "${workspaceFolder}/node_modules/.bin/playwright",
+      "args": ["test", "--ui"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "preLaunchTask": "Build Tailwind CSS (Production)"
     }
   ],
   "compounds": [
     {
-      "name": "Serve and Open in Chrome",
+      "name": "Serve and Open in Chrome (Production)",
       "configurations": [
-        "Start Static Server (npx serve)",
+        "Start Static Server (Production)",
+        "Open App in Chrome"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "Development Mode (with CSS Watch)",
+      "configurations": [
+        "Start Development Server (with CSS Watch)",
         "Open App in Chrome"
       ],
       "stopAll": true

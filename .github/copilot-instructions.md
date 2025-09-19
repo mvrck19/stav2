@@ -16,9 +16,9 @@ It follows modern software development best practices with emphasis on clean cod
 - Data-driven: content stored in `questions.json`.
 - SVGs follow naming (`*_q.svg`, `*_a.svg`).
 - Separation of concerns:  
-  - Data (`questions.json`)  
-  - Visuals (SVGs)  
-  - Logic/UI (`index.html`, `styles.css`)
+    - Data (`questions.json`)  
+    - Visuals (SVGs)  
+    - Logic/UI (`index.html`, `styles.css`)
 
 ### CSS & Layout (Tailwind)
 - Prefer using **Tailwind CSS** for utility-first styling. For small/quick previews you may use the Tailwind CDN, but for production add Tailwind as a dev dependency and build a compiled stylesheet.
@@ -27,7 +27,7 @@ It follows modern software development best practices with emphasis on clean cod
 - Keep HTML semantic and accessible — Tailwind controls presentation only.
 - When a project needs custom design tokens, extend `tailwind.config.js` rather than scattering custom CSS.
 
----
+--- 
 
 # Coding Standards
 
@@ -58,7 +58,7 @@ It follows modern software development best practices with emphasis on clean cod
 - Fail-secure defaults.  
 - Log without exposing sensitive data.
 
----
+--- 
 
 # Testing
 - Use [Playwright](https://playwright.dev/) for end-to-end tests (focus mobile).  
@@ -67,7 +67,7 @@ It follows modern software development best practices with emphasis on clean cod
 - Mock external dependencies.  
 - Good coverage on critical paths.
 
----
+--- 
 
 # Documentation
 - Keep this file updated.  
@@ -76,7 +76,7 @@ It follows modern software development best practices with emphasis on clean cod
 - Document APIs with examples.  
 - Inline comments for complex algorithms.
 
----
+--- 
 
 # Dependencies
 - Use Tailwind as a development dependency (`tailwindcss`, `postcss`, `autoprefixer`) when compiling CSS.
@@ -84,7 +84,7 @@ It follows modern software development best practices with emphasis on clean cod
 - Pin Tailwind and PostCSS versions in `package.json` for reproducible builds.
 - Regularly run `npm audit` and update dependencies.
 
----
+--- 
 
 # Git and Version Control
 - Clear, descriptive commit messages.  
@@ -93,7 +93,7 @@ It follows modern software development best practices with emphasis on clean cod
 - Branch per feature.  
 - Link to issues in commits.
 
----
+--- 
 
 # Code Review
 - Add TODOs for security review.  
@@ -101,7 +101,7 @@ It follows modern software development best practices with emphasis on clean cod
 - Suggest improvements for readability/maintainability.  
 - Verify consistency with codebase.
 
----
+--- 
 
 # Framework-Specific Guidelines
 
@@ -111,6 +111,18 @@ It follows modern software development best practices with emphasis on clean cod
 - Optimize bundle size, use lazy loading.  
 - Secure cookies and CSP headers.
 
+### GitHub Pages Hosting
+- **Static-only:** GitHub Pages only serves static files. Do not rely on any server-side code, runtime backends, or serverless functions. Keep all logic client-side (JS) and data in static assets (`.json`, `.js`, etc.).
+- **Relative paths:** Use relative or root-relative paths carefully. Prefer relative paths (e.g., `./assets/...`) when repository will be published to `username.github.io/repo-name` to avoid broken links. If you publish to the repository's root (custom domain or user/organization site), `"/"`-rooted paths will work.
+- **No build-time secrets:** Never embed secrets or API keys in the repository; they will be public when hosted.
+- **Large file limits:** Keep the site small — GitHub limits repository size and Pages has bandwidth/size considerations. Avoid large assets and prefer compressed images and SVGs.
+- **Disable Jekyll when needed:** If you use file/folder names starting with an underscore or want plain files served as-is, add an empty `.nojekyll` file at the repo root to bypass Jekyll processing.
+- **Branch and folder options:** GitHub Pages can publish from the `gh-pages` branch, `main` branch root, or the `docs/` folder. Document which one to use in `README.md` and in repo settings.
+- **CORS and external assets:** Be mindful when loading external fonts, scripts, or APIs — ensure the external host permits CORS and is accessible from static pages.
+- **HTTPS & custom domains:** Pages provides HTTPS by default; when using a custom domain configure DNS properly and verify `CNAME` in the repo if required.
+- **Testing locally:** Use a simple static server for local testing (e.g., `npx http-server .` or `python -m http.server`) rather than expecting Node server frameworks to work.
+- **CI/CD tip:** For larger projects, use GitHub Actions to build assets (Tailwind, bundlers) and output to `gh-pages` or `docs/` branch. Keep the published artifact small and commit the source to the main branch.
+
 ### Database (if added later)
 - Use migrations.  
 - Index queried columns.  
@@ -118,73 +130,9 @@ It follows modern software development best practices with emphasis on clean cod
 - Use transactions for multi-step operations.  
 - Plan backup and recovery.
 
----
+--- 
 
 # Build and Deployment (with Tailwind)
 - Add a small build step to compile Tailwind into a single `dist/styles.css` artifact.
 - Example PowerShell commands to set up Tailwind locally:
 
-```powershell
-# Initialize project (if not already initialized)
-npm init -y
-
-# Install Tailwind and build tooling
-npm install -D tailwindcss postcss autoprefixer
-
-# Create config files
-npx tailwindcss init -p
-
-# Create source stylesheet `src/input.css` containing:
-## @tailwind base;
-## @tailwind components;
-## @tailwind utilities;
-
-# Build once
-npx tailwindcss -i ./src/input.css -o ./dist/styles.css --minify
-
-# Or start a watch build for development
-npx tailwindcss -i ./src/input.css -o ./dist/styles.css --watch
-```
-
-- CI/CD: include the build step in your pipeline so `dist/styles.css` is generated before deployment.
-- Keep `styles.css` in source control only if it's a compiled artifact required by your static host; otherwise add `dist/` to `.gitignore` and publish the compiled file as part of your release.
-
----
-
-# General Practices
-- DRY principle.  
-- SOLID design.  
-- Appropriate design patterns.  
-- Regular refactoring.  
-- Preserve backward compatibility.
-
----
-
-# Code Formatting
-- Use automated formatters.  
-- Follow language style guides.  
-- Organize imports.  
-- Remove unused code.  
-- Keep meaningful whitespace.
-
----
-
-# Developer Workflows (Tailwind)
-- **Edit content**: update `questions.json`.
-- **Edit visuals**: update SVGs.
-- **Edit UI/logic**: modify `index.html` and `src/input.css` (or update component classes directly in HTML).
-- **Style changes**: prefer adding Tailwind utility classes or extending `tailwind.config.js`. If custom components are needed, define them in `src/input.css` using `@layer components`.
-- **Preview**: run the watch build (`npx tailwindcss -i ./src/input.css -o ./dist/styles.css --watch`) and open `index.html` referencing `./dist/styles.css`.
-- **Testing**: run `npx playwright test` after the build step; ensure CI includes the Tailwind build.
-
----
-
-# Code Acceptance Policy
-- All code must pass Playwright tests before merge.
-
----
-
-# Example: Adding a New Question
-1. Add to `questions.json`.  
-2. Add SVGs (`*_q.svg`, `*_a.svg`).  
-3. Update `index.html` logic if needed.  
