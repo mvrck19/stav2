@@ -132,9 +132,9 @@ function startCategory(id) {
         aSvg.addEventListener('load', onSvgLoad, { once: true });
         setTimeout(() => {
             if (cat.id === 'grammar') {
-            } else if (cat.id === 'syntax') {
                 qSvg.setAttribute('data', 'svg/grammar_q.svg');
                 aSvg.setAttribute('data', 'svg/grammar_a.svg');
+            } else if (cat.id === 'syntax') {
                 qSvg.setAttribute('data', 'svg/syntax_q.svg');
                 aSvg.setAttribute('data', 'svg/syntax_a.svg');
             }
