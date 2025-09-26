@@ -4,7 +4,7 @@ import { getQuestions } from './helpers';
 test.use({ ...devices['iPhone 8'] });
 
 test('5. Mobile Responsiveness', async ({ page }) => {
-  await page.goto('http://localhost:3000/index.html');
+  await page.goto('http://localhost:3000/');
   await expect(page.locator('.container')).toBeVisible();
   const cat1 = await page.locator('.category-btn').nth(0).boundingBox();
   const cat2 = await page.locator('.category-btn').nth(1).boundingBox();

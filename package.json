@@ -5,10 +5,10 @@
   "main": "quiz-app.js",
   "scripts": {
     "build": "npm run build-css-prod",
-    "build-css": "tailwindcss -i ./src/input.css -o ./dist/styles.css --watch",
-    "build-css-prod": "tailwindcss -i ./src/input.css -o ./dist/styles.css --minify",
-    "dev": "npm run build-css-prod && npx serve -s . -p 3000",
-    "start": "npx serve -s . -p 3000",
+    "build-css": "tailwindcss -i ./app/input.css -o ./app/styles.css --watch",
+    "build-css-prod": "tailwindcss -i ./app/input.css -o ./app/styles.css --minify",
+    "dev": "npm run build-css-prod && npx serve -s app -p 3000",
+    "start": "npx serve -s app -p 3000",
     "test": "npx playwright test",
     "test:ui": "npx playwright test --ui"
   },

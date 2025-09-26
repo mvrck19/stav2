@@ -4,7 +4,7 @@ import { getQuestions } from './helpers';
 test.use({ ...devices['iPhone 8'] });
 
 test('7. Navigation', async ({ page }) => {
-  await page.goto('http://localhost:3000/index.html');
+  await page.goto('http://localhost:3000/');
   await page.locator('.category-btn').first().click();
   await expect(page.locator('#cards-container')).toBeVisible();
   await page.locator('#backToCategories').click();

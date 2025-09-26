@@ -6,7 +6,7 @@ test.use({ ...devices['iPhone 8'] });
 test('4. High Score Persistence', async ({ page }) => {
   const { categories } = await getQuestions(page);
   const firstCategory = categories[0];
-  await page.goto('http://localhost:3000/index.html');
+  await page.goto('http://localhost:3000/');
   await page.evaluate(() => localStorage.clear());
   await page.locator('.category-btn', { hasText: firstCategory.title }).click();
 

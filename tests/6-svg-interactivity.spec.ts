@@ -4,7 +4,7 @@ import { getQuestions } from './helpers';
 test.use({ ...devices['iPhone 8'] });
 
 test('6. SVG Interactivity', async ({ page }) => {
-  await page.goto('http://localhost:3000/index.html');
+  await page.goto('http://localhost:3000/');
   await page.locator('.category-btn').first().click();
 
   await page.waitForFunction(

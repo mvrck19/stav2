@@ -8,7 +8,7 @@ test('3. Score and Progress', async ({ page }) => {
   const firstCategory = categories[0];
   const firstQuestion = firstCategory.questions[0];
 
-  await page.goto('http://localhost:3000/index.html');
+  await page.goto('http://localhost:3000/');
   await page.locator('.category-btn', { hasText: firstCategory.title }).click();
   await expect(page.locator('#globalScore')).toHaveText('Points: 0');
   await expect(page.locator('#progressBarText')).toHaveText(`1 / ${firstCategory.questions.length}`);

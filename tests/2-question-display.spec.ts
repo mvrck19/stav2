@@ -8,7 +8,7 @@ test('2. Question Display (Text, Choices, Feedback, Next)', async ({ page }) => 
   const firstCategory = categories[0];
   const firstQuestion = firstCategory.questions[0];
 
-  await page.goto('http://localhost:3000/index.html');
+  await page.goto('http://localhost:3000/');
   await page.locator('.category-btn', { hasText: firstCategory.title }).click();
 
   await page.waitForFunction(
