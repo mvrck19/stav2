@@ -1,9 +1,8 @@
 import { test, expect, devices } from '@playwright/test';
 import { getQuestions } from './helpers';
 
-test.use({ ...devices['iPhone 8'] });
 
-test('5. Mobile Responsiveness', async ({ page }) => {
+test('Mobile Responsiveness', async ({ page }) => {
   await page.goto('http://localhost:3000/');
   await expect(page.locator('.container')).toBeVisible();
   const cat1 = await page.locator('.category-btn').nth(0).boundingBox();

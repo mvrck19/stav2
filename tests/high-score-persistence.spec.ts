@@ -1,9 +1,8 @@
 import { test, expect, devices } from '@playwright/test';
 import { getQuestions } from './helpers';
 
-test.use({ ...devices['iPhone 8'] });
 
-test('4. High Score Persistence', async ({ page }) => {
+test('High Score Persistence', async ({ page }) => {
   const { categories } = await getQuestions(page);
   const firstCategory = categories[0];
   await page.goto('http://localhost:3000/');

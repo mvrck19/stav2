@@ -1,9 +1,8 @@
 import { test, expect, devices } from '@playwright/test';
 import { getQuestions } from './helpers';
 
-test.use({ ...devices['iPhone 8'] });
 
-test('1. Category Selection Flow', async ({ page }) => {
+test('Category Selection Flow', async ({ page }) => {
   const { categories } = await getQuestions(page);
   await page.goto('http://localhost:3000/');
   for (const category of categories) {

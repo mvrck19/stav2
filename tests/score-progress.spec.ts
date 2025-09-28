@@ -1,9 +1,8 @@
 import { test, expect, devices } from '@playwright/test';
 import { getQuestions } from './helpers';
 
-test.use({ ...devices['iPhone 8'] });
 
-test('3. Score and Progress', async ({ page }) => {
+test('Score and Progress', async ({ page }) => {
   const { categories } = await getQuestions(page);
   const firstCategory = categories[0];
   const firstQuestion = firstCategory.questions[0];

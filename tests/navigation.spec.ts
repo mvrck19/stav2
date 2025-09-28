@@ -1,9 +1,8 @@
 import { test, expect, devices } from '@playwright/test';
 import { getQuestions } from './helpers';
 
-test.use({ ...devices['iPhone 8'] });
 
-test('7. Navigation', async ({ page }) => {
+test('Navigation', async ({ page }) => {
   await page.goto('http://localhost:3000/');
   await page.locator('.category-btn').first().click();
   await expect(page.locator('#cards-container')).toBeVisible();
