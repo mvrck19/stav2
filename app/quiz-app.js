@@ -100,6 +100,7 @@ function startCategory(id) {
     if (backBtn) backBtn.style.display = 'flex';
     document.getElementById('category-screen').style.display = 'none';
     document.getElementById('cards-container').style.display = 'block';
+    document.getElementById('action-buttons').style.display = 'flex';
     // swap SVG assets depending on category
     const qSvg = document.getElementById('qSvg');
     const aSvg = document.getElementById('aSvg');
@@ -166,30 +167,34 @@ function displayQuestion(index) {
         document.querySelector('.question-section').classList.remove('active');
         document.querySelector('.answer-section').classList.add('active');
         updateAnswerInSVG(q, answered.chosenIndex);
+        
+        // Show next button, hide submit button for answered questions
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        if (submitBtn) {
+            submitBtn.style.display = 'none';
+            submitBtn.disabled = true;
+        }
+        if (nextBtn) {
+            nextBtn.style.display = 'inline-block';
+            nextBtn.disabled = false;
+        }
     } else {
         const card3d = document.getElementById('card3d');
         card3d.classList.remove('flipped');
         document.querySelector('.question-section').classList.add('active');
         document.querySelector('.answer-section').classList.remove('active');
         setTimeout(() => {
-            const qSvgObj = document.getElementById('qSvg');
-            if (qSvgObj && qSvgObj.contentDocument) {
-                try {
-                    const svgDoc = qSvgObj.contentDocument;
-                    const foreignObject = svgDoc.querySelector('foreignObject');
-                    if (foreignObject) {
-                        const htmlBody = foreignObject.querySelector('body');
-                        if (htmlBody) {
-                            const submitBtn = htmlBody.querySelector('#submit-btn');
-                            if (submitBtn) {
-                                submitBtn.style.display = 'none';
-                                submitBtn.disabled = true;
-                            }
-                        }
-                    }
-                } catch (e) {
-                    console.warn('Could not reset submit button:', e);
-                }
+            // Reset external buttons for unanswered questions
+            const submitBtn = document.getElementById('submit-btn');
+            const nextBtn = document.getElementById('next-btn');
+            if (submitBtn) {
+                submitBtn.style.display = 'none';
+                submitBtn.disabled = true;
+            }
+            if (nextBtn) {
+                nextBtn.style.display = 'none';
+                nextBtn.disabled = true;
             }
         }, 100);
     }
@@ -231,11 +236,13 @@ function updateQuestionInSVG(q) {
                 createdBtns.forEach((btn, renderedIndex) => {
                     btn.onclick = () => selectChoiceInSVG(renderedIndex);
                 });
-                const submitBtn = htmlBody.querySelector('#submit-btn');
-                if (submitBtn) {
-                    submitBtn.style.display = 'none';
-                    submitBtn.disabled = true;
-                    submitBtn.onclick = () => {
+                
+                // Set up external submit button
+                const externalSubmitBtn = document.getElementById('submit-btn');
+                if (externalSubmitBtn) {
+                    externalSubmitBtn.style.display = 'none';
+                    externalSubmitBtn.disabled = true;
+                    externalSubmitBtn.onclick = () => {
                         const selectedBtn = htmlBody.querySelector('.choice-btn.selected');
                         if (selectedBtn) {
                             const renderedIndex = Array.from(createdBtns).indexOf(selectedBtn);
@@ -302,9 +309,13 @@ function updateAnswerInSVG(q, chosenOriginalIndex) {
             } else if (explanation) {
                 explanation.style.display = 'none';
             }
-            const nextBtn = htmlBody.querySelector('#next-btn');
-            if (nextBtn) {
-                nextBtn.onclick = () => {
+            
+            // Set up external next button
+            const externalNextBtn = document.getElementById('next-btn');
+            if (externalNextBtn) {
+                externalNextBtn.style.display = 'inline-block';
+                externalNextBtn.disabled = false;
+                externalNextBtn.onclick = () => {
                     currentQuestionIndex++;
                     if (currentQuestionIndex >= questions.length) {
                         showSessionSummary(true);
@@ -312,6 +323,13 @@ function updateAnswerInSVG(q, chosenOriginalIndex) {
                         displayQuestion(currentQuestionIndex);
                     }
                 };
+            }
+            
+            // Hide submit button after answering
+            const externalSubmitBtn = document.getElementById('submit-btn');
+            if (externalSubmitBtn) {
+                externalSubmitBtn.style.display = 'none';
+                externalSubmitBtn.disabled = true;
             }
             return true;
         } catch (e) {
@@ -343,10 +361,12 @@ function selectChoiceInSVG(renderedIndex) {
                     if (selectedBtn) {
                         selectedBtn.classList.add('selected');
                     }
-                    const submitBtn = htmlBody.querySelector('#submit-btn');
-                    if (submitBtn) {
-                        submitBtn.style.display = 'block';
-                        submitBtn.disabled = false;
+                    
+                    // Show external submit button
+                    const externalSubmitBtn = document.getElementById('submit-btn');
+                    if (externalSubmitBtn) {
+                        externalSubmitBtn.style.display = 'inline-block';
+                        externalSubmitBtn.disabled = false;
                     }
                 }
             }
@@ -458,6 +478,7 @@ function showSessionSummary(isCompletion = false) {
 function hideSummaryAndReturn() {
     document.getElementById('summaryModal').style.display = 'none';
     document.getElementById('cards-container').style.display = 'none';
+    document.getElementById('action-buttons').style.display = 'none';
     document.getElementById('category-screen').style.display = 'block';
     const globalScore = document.getElementById('globalScore');
     if (globalScore) globalScore.style.display = 'none';
