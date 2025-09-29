@@ -293,7 +293,7 @@ function selectChoice(renderedIndex) {
     // Update choice buttons in the HTML overlay
     const questionContent = document.querySelector('.question-content');
     if (questionContent) {
-        const allBtns = questionContent.querySelectorAll('.choice-btn');
+        const allBtns = questionContent.querySelectorAll('.choice-button');
         allBtns.forEach(btn => btn.classList.remove('selected'));
         const selectedBtn = allBtns[renderedIndex];
         if (selectedBtn) {
