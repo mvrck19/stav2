@@ -100,49 +100,29 @@ function startCategory(id) {
     if (backBtn) backBtn.style.display = 'flex';
     document.getElementById('category-screen').style.display = 'none';
     document.getElementById('cards-container').style.display = 'block';
-    // swap SVG assets depending on category
-    const qSvg = document.getElementById('qSvg');
-    const aSvg = document.getElementById('aSvg');
-    if (qSvg && aSvg) {
-        let svgsLoaded = 0;
-        const totalSvgs = 2;
-        function onSvgLoad() {
-            svgsLoaded++;
-            if (svgsLoaded === totalSvgs) {
-                setTimeout(() => {
-                    displayQuestion(0);
-                    document.querySelector('.question-section').classList.add('active');
-                    updateProgress();
-                    updateScore(true);
-                    updatePrevButton();
-                }, 200);
-            }
-        }
-        function checkSvgLoaded(svgElement) {
-            if (svgElement.contentDocument) {
-                onSvgLoad();
-            }
-        }
-        qSvg.setAttribute('data', '');
-        aSvg.setAttribute('data', '');
-        svgsLoaded = 0;
-        qSvg.removeEventListener('load', onSvgLoad);
-        aSvg.removeEventListener('load', onSvgLoad);
-        qSvg.addEventListener('load', onSvgLoad, { once: true });
-        aSvg.addEventListener('load', onSvgLoad, { once: true });
+    document.getElementById('action-buttons').style.display = 'flex';
+    
+    // Set background SVGs for the new structure
+    const questionCard = document.getElementById('question-card');
+    const answerCard = document.getElementById('answer-card');
+    
+    if (questionCard && answerCard) {
+        // Remove old category classes
+        questionCard.className = questionCard.className.replace(/\b(syntax|grammar)\b/g, '');
+        answerCard.className = answerCard.className.replace(/\b(syntax|grammar)\b/g, '');
+        
+        // Add new category classes for background images
+        questionCard.classList.add(cat.id);
+        answerCard.classList.add(cat.id);
+        
+        // Initialize the quiz
         setTimeout(() => {
-            if (cat.id === 'grammar') {
-                qSvg.setAttribute('data', 'svg/grammar_q.svg');
-                aSvg.setAttribute('data', 'svg/grammar_a.svg');
-            } else if (cat.id === 'syntax') {
-                qSvg.setAttribute('data', 'svg/syntax_q.svg');
-                aSvg.setAttribute('data', 'svg/syntax_a.svg');
-            }
-            setTimeout(() => {
-                checkSvgLoaded(qSvg);
-                checkSvgLoaded(aSvg);
-            }, 300);
-        }, 50);
+            displayQuestion(0);
+            document.querySelector('.question-section').classList.add('active');
+            updateProgress();
+            updateScore(true);
+            updatePrevButton();
+        }, 100);
     }
 }
 
@@ -159,37 +139,41 @@ function displayQuestion(index) {
         return;
     }
     const q = questions[index];
-    updateQuestionInSVG(q);
+    updateQuestion(q);
     const answered = answeredMap[q.id];
     if (answered) {
         document.getElementById('card3d').classList.add('flipped');
         document.querySelector('.question-section').classList.remove('active');
         document.querySelector('.answer-section').classList.add('active');
-        updateAnswerInSVG(q, answered.chosenIndex);
+        updateAnswer(q, answered.chosenIndex);
+        
+        // Show next button, hide submit button for answered questions
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        if (submitBtn) {
+            submitBtn.style.display = 'none';
+            submitBtn.disabled = true;
+        }
+        if (nextBtn) {
+            nextBtn.style.display = 'inline-block';
+            nextBtn.disabled = false;
+        }
     } else {
         const card3d = document.getElementById('card3d');
         card3d.classList.remove('flipped');
         document.querySelector('.question-section').classList.add('active');
         document.querySelector('.answer-section').classList.remove('active');
         setTimeout(() => {
-            const qSvgObj = document.getElementById('qSvg');
-            if (qSvgObj && qSvgObj.contentDocument) {
-                try {
-                    const svgDoc = qSvgObj.contentDocument;
-                    const foreignObject = svgDoc.querySelector('foreignObject');
-                    if (foreignObject) {
-                        const htmlBody = foreignObject.querySelector('body');
-                        if (htmlBody) {
-                            const submitBtn = htmlBody.querySelector('#submit-btn');
-                            if (submitBtn) {
-                                submitBtn.style.display = 'none';
-                                submitBtn.disabled = true;
-                            }
-                        }
-                    }
-                } catch (e) {
-                    console.warn('Could not reset submit button:', e);
-                }
+            // Reset external buttons for unanswered questions
+            const submitBtn = document.getElementById('submit-btn');
+            const nextBtn = document.getElementById('next-btn');
+            if (submitBtn) {
+                submitBtn.style.display = 'none';
+                submitBtn.disabled = true;
+            }
+            if (nextBtn) {
+                nextBtn.style.display = 'none';
+                nextBtn.disabled = true;
             }
         }, 100);
     }
@@ -198,159 +182,130 @@ function displayQuestion(index) {
 }
 
 // Update question and choices in SVG
-function updateQuestionInSVG(q) {
-    const qSvgObj = document.getElementById('qSvg');
-    function tryUpdateSVG() {
-        try {
-            const svgDoc = qSvgObj.contentDocument;
-            if (!svgDoc) return false;
-            const foreignObject = svgDoc.querySelector('foreignObject');
-            if (!foreignObject) return false;
-            const htmlBody = foreignObject.querySelector('body');
-            if (!htmlBody) return false;
-            let qTextDiv = htmlBody.querySelector('#question-text');
-            if (!qTextDiv) qTextDiv = htmlBody.querySelector('.text-area');
-            let choicesArea = htmlBody.querySelector('#choices-area');
-            if (!choicesArea) choicesArea = htmlBody.querySelector('.choices-area');
-            if (qTextDiv) qTextDiv.textContent = q.question;
-            if (choicesArea) {
-                choicesArea.innerHTML = '';
-                let choicesWithOriginal;
-                if (shuffledChoicesCache[q.id]) {
-                    choicesWithOriginal = shuffledChoicesCache[q.id];
-                } else {
-                    choicesWithOriginal = q.choices.map((text, originalIndex) => ({ text, originalIndex }));
-                    shuffleArray(choicesWithOriginal);
-                    shuffledChoicesCache[q.id] = choicesWithOriginal;
-                }
-                choicesWithOriginal.forEach((obj, renderedIndex) => {
-                    const btnHtml = `<div class="choice-btn" data-original-index="${obj.originalIndex}">${obj.text}</div>`;
-                    choicesArea.insertAdjacentHTML('beforeend', btnHtml);
-                });
-                const createdBtns = choicesArea.querySelectorAll('.choice-btn');
-                createdBtns.forEach((btn, renderedIndex) => {
-                    btn.onclick = () => selectChoiceInSVG(renderedIndex);
-                });
-                const submitBtn = htmlBody.querySelector('#submit-btn');
-                if (submitBtn) {
-                    submitBtn.style.display = 'none';
-                    submitBtn.disabled = true;
-                    submitBtn.onclick = () => {
-                        const selectedBtn = htmlBody.querySelector('.choice-btn.selected');
-                        if (selectedBtn) {
-                            const renderedIndex = Array.from(createdBtns).indexOf(selectedBtn);
-                            evaluateAnswer(renderedIndex);
-                        }
-                    };
-                }
-            }
-            return true;
-        } catch (e) {
-            return false;
-        }
+// Update question content in HTML overlay (new approach)
+function updateQuestion(q) {
+    const questionText = document.getElementById('question-text');
+    const choicesContainer = document.getElementById('choices-container');
+    
+    if (questionText) {
+        questionText.textContent = q.question;
     }
-    if (qSvgObj) {
-        if (tryUpdateSVG()) return;
-        let retryCount = 0;
-        const maxRetries = 5;
-        function retryUpdate() {
-            retryCount++;
-            if (tryUpdateSVG()) return;
-            if (retryCount < maxRetries) {
-                setTimeout(retryUpdate, 200 * retryCount);
-            }
+    
+    if (choicesContainer) {
+        choicesContainer.innerHTML = '';
+        
+        // Create or get shuffled choices
+        let choicesWithOriginal;
+        if (shuffledChoicesCache[q.id]) {
+            choicesWithOriginal = shuffledChoicesCache[q.id];
+        } else {
+            choicesWithOriginal = q.choices.map((text, originalIndex) => ({ text, originalIndex }));
+            shuffleArray(choicesWithOriginal);
+            shuffledChoicesCache[q.id] = choicesWithOriginal;
         }
-        qSvgObj.addEventListener('load', () => {
-            setTimeout(retryUpdate, 300);
-        }, { once: true });
-        setTimeout(retryUpdate, 500);
+        
+        // Create choice buttons
+        choicesWithOriginal.forEach((obj, renderedIndex) => {
+            const button = document.createElement('button');
+            button.className = 'choice-button';
+            button.textContent = obj.text;
+            button.dataset.originalIndex = obj.originalIndex;
+            button.dataset.renderedIndex = renderedIndex;
+            button.onclick = () => selectChoice(renderedIndex);
+            choicesContainer.appendChild(button);
+        });
+        
+        // Set up external submit button
+        const externalSubmitBtn = document.getElementById('submit-btn');
+        if (externalSubmitBtn) {
+            externalSubmitBtn.style.display = 'none';
+            externalSubmitBtn.disabled = true;
+            externalSubmitBtn.onclick = () => {
+                const selectedBtn = choicesContainer.querySelector('.choice-button.selected');
+                if (selectedBtn) {
+                    const renderedIndex = parseInt(selectedBtn.dataset.renderedIndex);
+                    evaluateAnswer(renderedIndex);
+                }
+            };
+        }
     }
 }
 
-// Update answer in SVG
-function updateAnswerInSVG(q, chosenOriginalIndex) {
-    const aSvgObj = document.getElementById('aSvg');
-    function tryUpdateAnswerSVG() {
-        try {
-            const svgDoc = aSvgObj.contentDocument;
-            if (!svgDoc) return false;
-            const foreignObject = svgDoc.querySelector('foreignObject');
-            if (!foreignObject) return false;
-            const htmlBody = foreignObject.querySelector('body');
-            if (!htmlBody) return false;
-            const resultStatus = htmlBody.querySelector('#result-status');
-            const userChoice = htmlBody.querySelector('#user-choice');
-            const correctAnswer = htmlBody.querySelector('#correct-answer');
-            const explanation = htmlBody.querySelector('#explanation');
-            const correct = q.correctIndex === chosenOriginalIndex;
-            if (resultStatus) {
-                resultStatus.textContent = correct ? 'Σωστό! 🎉' : 'Λάθος 😞';
-                resultStatus.className = `result-status ${correct ? 'correct' : 'wrong'}`;
-            }
-            if (userChoice) {
-                userChoice.innerHTML = `<strong>Η επιλογή σου:</strong> ${q.choices[chosenOriginalIndex]}`;
-            }
-            if (correctAnswer && !correct) {
-                correctAnswer.innerHTML = `<strong>Σωστή απάντηση:</strong> ${q.choices[q.correctIndex]}`;
-                correctAnswer.style.display = 'block';
-            } else if (correctAnswer) {
-                correctAnswer.style.display = 'none';
-            }
-            if (explanation && q.explanation) {
-                explanation.textContent = q.explanation;
-                explanation.style.display = 'block';
-            } else if (explanation) {
-                explanation.style.display = 'none';
-            }
-            const nextBtn = htmlBody.querySelector('#next-btn');
-            if (nextBtn) {
-                nextBtn.onclick = () => {
-                    currentQuestionIndex++;
-                    if (currentQuestionIndex >= questions.length) {
-                        showSessionSummary(true);
-                    } else {
-                        displayQuestion(currentQuestionIndex);
-                    }
-                };
-            }
-            return true;
-        } catch (e) {
-            return false;
-        }
+// Update answer content in HTML overlay (new approach)
+function updateAnswer(q, chosenOriginalIndex) {
+    const resultStatus = document.getElementById('result-status');
+    const userChoice = document.getElementById('user-choice');
+    const correctAnswer = document.getElementById('correct-answer');
+    const explanation = document.getElementById('explanation');
+    
+    const correct = q.correctIndex === chosenOriginalIndex;
+    
+    if (resultStatus) {
+        resultStatus.textContent = correct ? 'Σωστό! 🎉' : 'Λάθος 😞';
+        resultStatus.className = `result-status ${correct ? 'correct' : 'wrong'}`;
     }
-    if (aSvgObj) {
-        if (tryUpdateAnswerSVG()) return;
-        aSvgObj.addEventListener('load', () => {
-            setTimeout(() => tryUpdateAnswerSVG(), 300);
-        }, { once: true });
+    
+    if (userChoice) {
+        userChoice.innerHTML = `<strong>Η επιλογή σου:</strong> ${q.choices[chosenOriginalIndex]}`;
+    }
+    
+    if (correctAnswer && !correct) {
+        correctAnswer.innerHTML = `<strong>Σωστή απάντηση:</strong> ${q.choices[q.correctIndex]}`;
+        correctAnswer.classList.remove('hidden');
+    } else if (correctAnswer) {
+        correctAnswer.classList.add('hidden');
+    }
+    
+    if (explanation && q.explanation) {
+        explanation.textContent = q.explanation;
+        explanation.classList.remove('hidden');
+    } else if (explanation) {
+        explanation.classList.add('hidden');
+    }
+    
+    // Set up external next button
+    const externalNextBtn = document.getElementById('next-btn');
+    if (externalNextBtn) {
+        externalNextBtn.style.display = 'inline-block';
+        externalNextBtn.disabled = false;
+        externalNextBtn.onclick = () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex >= questions.length) {
+                showSessionSummary(true);
+            } else {
+                displayQuestion(currentQuestionIndex);
+            }
+        };
+    }
+    
+    // Hide submit button after answering
+    const externalSubmitBtn = document.getElementById('submit-btn');
+    if (externalSubmitBtn) {
+        externalSubmitBtn.style.display = 'none';
+        externalSubmitBtn.disabled = true;
     }
 }
 
-function selectChoiceInSVG(renderedIndex) {
+function selectChoice(renderedIndex) {
     const q = questions[currentQuestionIndex];
     if (!q) return;
-    const qSvgObj = document.getElementById('qSvg');
-    if (qSvgObj && qSvgObj.contentDocument) {
-        try {
-            const svgDoc = qSvgObj.contentDocument;
-            const foreignObject = svgDoc.querySelector('foreignObject');
-            if (foreignObject) {
-                const htmlBody = foreignObject.querySelector('body');
-                if (htmlBody) {
-                    const allBtns = htmlBody.querySelectorAll('.choice-btn');
-                    allBtns.forEach(btn => btn.classList.remove('selected'));
-                    const selectedBtn = allBtns[renderedIndex];
-                    if (selectedBtn) {
-                        selectedBtn.classList.add('selected');
-                    }
-                    const submitBtn = htmlBody.querySelector('#submit-btn');
-                    if (submitBtn) {
-                        submitBtn.style.display = 'block';
-                        submitBtn.disabled = false;
-                    }
-                }
-            }
-        } catch (e) {}
+    
+    // Update choice buttons in the HTML overlay
+    const questionContent = document.querySelector('.question-content');
+    if (questionContent) {
+        const allBtns = questionContent.querySelectorAll('.choice-button');
+        allBtns.forEach(btn => btn.classList.remove('selected'));
+        const selectedBtn = allBtns[renderedIndex];
+        if (selectedBtn) {
+            selectedBtn.classList.add('selected');
+        }
+        
+        // Show external submit button
+        const externalSubmitBtn = document.getElementById('submit-btn');
+        if (externalSubmitBtn) {
+            externalSubmitBtn.style.display = 'inline-block';
+            externalSubmitBtn.disabled = false;
+        }
     }
 }
 
@@ -368,7 +323,7 @@ function evaluateAnswer(renderedIndex) {
     card3d.classList.add('flipped');
     document.querySelector('.question-section').classList.remove('active');
     document.querySelector('.answer-section').classList.add('active');
-    updateAnswerInSVG(q, chosenOriginalIndex);
+    updateAnswer(q, chosenOriginalIndex);
     updateScore(false, correct);
 }
 
@@ -458,6 +413,7 @@ function showSessionSummary(isCompletion = false) {
 function hideSummaryAndReturn() {
     document.getElementById('summaryModal').style.display = 'none';
     document.getElementById('cards-container').style.display = 'none';
+    document.getElementById('action-buttons').style.display = 'none';
     document.getElementById('category-screen').style.display = 'block';
     const globalScore = document.getElementById('globalScore');
     if (globalScore) globalScore.style.display = 'none';

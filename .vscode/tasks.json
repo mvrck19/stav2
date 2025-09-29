@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build Tailwind CSS (Production)",
+      "label": "Build Tailwind CSS",
       "type": "shell",
       "command": "npm",
       "args": ["run", "build-css-prod"],
@@ -11,83 +11,102 @@
         "isDefault": true
       },
       "presentation": {
-        "echo": true,
         "reveal": "silent",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
+        "panel": "shared"
       },
-      "problemMatcher": [],
-      "detail": "Build minified Tailwind CSS for production"
+      "problemMatcher": []
     },
     {
-      "label": "Build Tailwind CSS (Watch)",
+      "label": "Watch Tailwind CSS",
       "type": "shell",
       "command": "npm",
       "args": ["run", "build-css"],
-      "group": "build",
       "isBackground": true,
+      "group": "build",
       "presentation": {
-        "echo": true,
         "reveal": "always",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": false,
-        "clear": false
+        "panel": "dedicated"
       },
-      "problemMatcher": [
-        {
-          "pattern": [
-            {
-              "regexp": ".*",
-              "file": 1,
-              "location": 2,
-              "message": 3
-            }
-          ],
-          "background": {
-            "activeOnStart": true,
-            "beginsPattern": "^.*Rebuilding.*$",
-            "endsPattern": "^.*Done in.*$"
-          }
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "."
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*Rebuilding.*$",
+          "endsPattern": "^.*Done in.*ms$"
         }
-      ],
-      "detail": "Watch and rebuild Tailwind CSS on file changes"
+      }
+    },
+    {
+      "label": "Start Dev Server",
+      "type": "shell", 
+      "command": "npm",
+      "args": ["run", "dev"],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Server",
+      "type": "shell",
+      "command": "npm", 
+      "args": ["start"],
+      "isBackground": true,
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
     },
     {
       "label": "Run Tests",
       "type": "shell",
       "command": "npm",
       "args": ["test"],
-      "group": "test",
+      "group": {
+        "kind": "test", 
+        "isDefault": true
+      },
       "presentation": {
-        "echo": true,
         "reveal": "always",
-        "focus": true,
         "panel": "shared",
-        "showReuseMessage": true,
         "clear": true
       },
-      "problemMatcher": [],
-      "detail": "Run Playwright end-to-end tests"
+      "problemMatcher": []
     },
     {
-      "label": "Run Tests (UI Mode)",
+      "label": "Run Tests UI",
       "type": "shell",
       "command": "npm",
       "args": ["run", "test:ui"],
       "group": "test",
       "presentation": {
-        "echo": true,
         "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": true
+        "panel": "dedicated"
       },
-      "problemMatcher": [],
-      "detail": "Run Playwright tests in interactive UI mode"
+      "problemMatcher": []
+    },
+    {
+      "label": "Serve (Watch CSS)",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "Watch Tailwind CSS",
+        "Start Server"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ]
 }
