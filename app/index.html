@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="el">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,73 +9,95 @@
     <title>Γραμματική</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body class="font-sans bg-gray-100 min-h-screen flex justify-center items-center p-0 overflow-x-hidden text-xl">
-    <div id="globalScore" class="fixed top-3.5 right-4 gradient-primary text-white px-4 py-2.5 rounded-2xl text-sm font-semibold tracking-wide shadow-lg z-[999] flex items-center gap-2 before:content-['★'] before:text-sm before:drop-shadow-sm hidden">Points: 0</div>
-    <button id="backToCategories" class="fixed top-3.5 left-4 gradient-primary text-white border-none px-4 py-2.5 rounded-2xl text-sm font-semibold cursor-pointer tracking-wide shadow-lg z-[999] flex items-center gap-2 transition-all duration-150 hover:brightness-110 active:translate-y-0.5 hidden" aria-label="Επιστροφή στις κατηγορίες">← Κατηγορίες</button>
-    
+    <div id="globalScore"
+        class="fixed top-3.5 right-4 gradient-primary text-white px-4 py-2.5 rounded-2xl text-sm font-semibold tracking-wide shadow-lg z-[999] flex items-center gap-2 before:content-['★'] before:text-sm before:drop-shadow-sm hidden">
+        Points: 0</div>
+    <button id="backToCategories"
+        class="fixed top-3.5 left-4 gradient-primary text-white border-none px-4 py-2.5 rounded-2xl text-sm font-semibold cursor-pointer tracking-wide shadow-lg z-[999] flex items-center gap-2 transition-all duration-150 hover:brightness-110 active:translate-y-0.5 hidden"
+        aria-label="Επιστροφή στις κατηγορίες">← Κατηγορίες</button>
+
     <!-- Session Summary Modal -->
-    <div id="summaryModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 backdrop-blur flex items-center justify-center z-[1000] animate-fade-in hidden">
+    <div id="summaryModal"
+        class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 backdrop-blur flex items-center justify-center z-[1000] animate-fade-in hidden">
         <div class="gradient-summary p-10 pb-8 rounded-2xl shadow-2xl max-w-md w-[90%] text-center animate-slide-up">
             <h2 class="text-2xl text-primary mb-7 font-bold">Περίληψη Συνεδρίας</h2>
             <div class="flex flex-col gap-4 mb-8">
-                <div class="flex justify-between items-center py-3 px-5 bg-primary bg-opacity-8 rounded-xl border-l-4 border-primary">
+                <div
+                    class="flex justify-between items-center py-3 px-5 bg-primary bg-opacity-8 rounded-xl border-l-4 border-primary">
                     <span class="font-semibold text-primary text-sm">Πόντοι:</span>
                     <span id="summaryPoints" class="font-bold text-primary-dark text-lg">0</span>
                 </div>
-                <div class="flex justify-between items-center py-3 px-5 bg-primary bg-opacity-8 rounded-xl border-l-4 border-primary">
+                <div
+                    class="flex justify-between items-center py-3 px-5 bg-primary bg-opacity-8 rounded-xl border-l-4 border-primary">
                     <span class="font-semibold text-primary text-sm">Ακρίβεια:</span>
                     <span id="summaryAccuracy" class="font-bold text-primary-dark text-lg">0%</span>
                 </div>
-                <div class="flex justify-between items-center py-3 px-5 bg-primary bg-opacity-8 rounded-xl border-l-4 border-primary">
+                <div
+                    class="flex justify-between items-center py-3 px-5 bg-primary bg-opacity-8 rounded-xl border-l-4 border-primary">
                     <span class="font-semibold text-primary text-sm">Σωστές Απαντήσεις:</span>
                     <span id="summaryCorrect" class="font-bold text-primary-dark text-lg">0/0</span>
                 </div>
-                <div id="highScoreNotice" class="gradient-gold text-yellow-900 py-3 rounded-xl font-bold text-base mt-2 animate-pulse-custom hidden">
+                <div id="highScoreNotice"
+                    class="gradient-gold text-yellow-900 py-3 rounded-xl font-bold text-base mt-2 animate-pulse-custom hidden">
                     🏆 Νέο Ρεκόρ!
                 </div>
             </div>
             <div class="flex justify-center gap-4">
-                <button id="summaryReturnBtn" class="py-3 px-7 border-none rounded-2xl font-semibold text-sm cursor-pointer transition-all duration-200 gradient-primary text-white shadow-lg hover:-translate-y-0.5 hover:shadow-xl w-full">Επιστροφή στις Κατηγορίες</button>
+                <button id="summaryReturnBtn"
+                    class="py-3 px-7 border-none rounded-2xl font-semibold text-sm cursor-pointer transition-all duration-200 gradient-primary text-white shadow-lg hover:-translate-y-0.5 hover:shadow-xl w-full">Επιστροφή
+                    στις Κατηγορίες</button>
             </div>
         </div>
     </div>
-    
-    <div class="container w-full max-w-2xl flex items-center justify-center min-h-screen p-0">
-        <div id="category-screen" class="w-full max-w-2xl bg-white px-8 py-10 pb-12 rounded-3xl shadow-xl animate-fade-in text-center block">
+
+    <div class="container w-full max-w-2xl flex flex-col items-center justify-center min-h-screen p-0">
+        <div id="category-screen"
+            class="w-full max-w-2xl bg-white px-8 py-10 pb-12 rounded-3xl shadow-xl animate-fade-in text-center block">
             <h1 class="text-4xl mb-2 text-blue-900 tracking-wide">Επιλογή Κατηγορίας</h1>
             <p class="text-base text-blue-700 mb-8">Διάλεξε τι θέλεις να εξασκηθείς.</p>
             <div id="categories" class="grid gap-5"></div>
         </div>
-        <div id="cards-container" class="w-full perspective-1000 preserve-3d h-[640px] relative hidden">
+        <div id="cards-container"
+            class="w-full perspective-1000 preserve-3d relative hidden flex flex-col items-center z-0 mb-8">
             <div class="absolute top-2.5 right-3.5 z-50">
-                <div id="progressBarText" class="text-xs text-primary bg-white bg-opacity-90 px-2.5 py-1.5 rounded-xl shadow-sm font-semibold tracking-wide">0 / 0</div>
+                <div id="progressBarText"
+                    class="text-xs text-primary bg-white bg-opacity-90 px-2.5 py-1.5 rounded-xl shadow-sm font-semibold tracking-wide">
+                    0 / 0</div>
             </div>
             <div class="card-3d" id="card3d">
-            <div class="card-inner">
-            <div class="question-section card-face active">
-                <div class="relative">
-                    <object id="qSvg" data="svg/syntax_q.svg" type="image/svg+xml" class="w-full h-auto block relative z-0" aria-label="Question Card"></object>
+                <div class="card-inner">
+                    <div class="question-section card-face active">
+                        <div class="relative">
+                            <object id="qSvg" data="svg/syntax_q.svg" type="image/svg+xml"
+                                class="w-full h-auto block relative z-0" aria-label="Question Card"></object>
+                        </div>
+                    </div>
+                    <div class="answer-section card-face">
+                        <div class="relative">
+                            <object id="aSvg" data="svg/syntax_a.svg" type="image/svg+xml"
+                                class="w-full h-auto block relative z-0" aria-label="Answer Card"></object>
+                        </div>
+                    </div> <!-- .card-inner -->
                 </div>
-            </div>
-            <div class="answer-section card-face">
-                <div class="relative">
-                    <object id="aSvg" data="svg/syntax_a.svg" type="image/svg+xml" class="w-full h-auto block relative z-0" aria-label="Answer Card"></object>
-                </div>
-            </div> <!-- .card-inner -->
-            </div>
             </div> <!-- .card-3d -->
         </div>
-        
-        <!-- Action Buttons -->
-        <div id="action-buttons" class="w-full flex justify-center gap-4 mt-6 hidden">
-            <button id="submit-btn" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 text-lg">
+        <!-- End cards-container -->
+
+        <!-- Action Buttons (now outside cards-container) -->
+        <div id="action-buttons" class="flex justify-center gap-4 mt-8 z-10 relative hidden">
+            <button id="submit-btn"
+                class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 text-lg">
                 Υποβολή
             </button>
-            <button id="next-btn" class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 text-lg">
+            <button id="next-btn"
+                class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 text-lg">
                 Επόμενη
             </button>
         </div>
     </div>
     <script src="quiz-app.js"></script>
 </body>
+
 </html>
