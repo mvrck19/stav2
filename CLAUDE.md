@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Greek language quiz application focused on grammar and syntax. It's a static web project that runs entirely client-side using HTML, CSS (Tailwind), JavaScript, and JSON data files.
 
+**Deployment**: This project is designed for GitHub Pages deployment. All files should be in the root directory for proper GitHub Pages serving.
+
 ## Commands
 
 ### Development
@@ -42,11 +44,11 @@ This approach provides better accessibility, easier content management, and cons
 ## File Structure
 
 ### Core Application Files
-- `app/index.html` - Main HTML entry point with card-background divs and overlay content areas
-- `app/quiz-app.js` - Quiz logic with direct HTML DOM manipulation (no SVG foreign object access)
-- `app/questions.json` - Quiz data and question content
-- `app/styles.css` - Compiled Tailwind CSS output
-- `app/input.css` - Tailwind CSS source file
+- `index.html` - Main HTML entry point with card-background divs and overlay content areas
+- `quiz-app.js` - Quiz logic with direct HTML DOM manipulation (no SVG foreign object access)
+- `questions.json` - Quiz data and question content
+- `styles.css` - Compiled Tailwind CSS output
+- `input.css` - Tailwind CSS source file
 
 ### Configuration
 - `tailwind.config.js` - Tailwind configuration with custom colors, animations, and component layers
@@ -63,8 +65,8 @@ This approach provides better accessibility, easier content management, and cons
   - Navigation flows
 
 ### Assets
-- `app/svg/` - SVG background images for different categories and states
-- `app/goals.jpg` - Static image asset
+- `svg/` - SVG background images for different categories and states
+- `goals.jpg` - Static image asset
 
 ## Development Patterns
 
@@ -81,7 +83,7 @@ This approach provides better accessibility, easier content management, and cons
 - LocalStorage for high score persistence
 
 ### Content Management
-- Questions stored in structured JSON format in `app/questions.json`
+- Questions stored in structured JSON format in `questions.json`
 - SVG naming convention: `*_q.svg` for questions, `*_a.svg` for answers
 - Separation of concerns: data (JSON), visuals (SVG), content overlays (HTML/CSS), logic (JS)
 

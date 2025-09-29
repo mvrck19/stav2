@@ -45,9 +45,9 @@
                 </div>
             </div>
             <div class="flex justify-center gap-4">
-                <button id="summaryReturnBtn"
-                    class="py-3 px-6 rounded-2xl font-semibold text-sm gradient-primary text-white shadow-lg w-full">Επιστροφή
-                    στις Κατηγορίες</button>
+                <button id="summaryReturnBtn" class="btn btn-primary text-sm w-full">
+                    Επιστροφή στις Κατηγορίες
+                </button>
             </div>
         </div>
     </div>
@@ -61,9 +61,9 @@
         </div>
         <div id="cards-container"
             class="w-full perspective-1000 preserve-3d relative hidden flex flex-col items-center my-4">
-            <div class="absolute top-2 right-3 z-50">
+            <div class="w-full flex justify-center mb-4">
                 <div id="progressBarText"
-                    class="text-xs text-primary bg-white bg-opacity-90 px-2 py-1 rounded-xl shadow-sm font-semibold">
+                    class="text-sm text-primary bg-white bg-opacity-90 px-4 py-2 rounded-xl shadow-md font-semibold">
                     0 / 0</div>
             </div>
             <div class="card-3d" id="card3d">
@@ -73,10 +73,10 @@
                         <div id="question-card" class="card-background question-bg w-full h-full relative">
                             <!-- Question Content Overlay -->
                             <div class="question-content">
-                                <div id="question-text" class="question-text-area bg-white bg-opacity-95 rounded-lg p-3 text-center">
+                                <div id="question-text" class="question-text-area">
                                     <!-- Question text will be inserted here -->
                                 </div>
-                                <div id="choices-container" class="choices-area space-y-2">
+                                <div id="choices-container" class="choices-area">
                                     <!-- Choice buttons will be inserted here -->
                                 </div>
                             </div>
@@ -87,11 +87,11 @@
                         <div id="answer-card" class="card-background answer-bg w-full h-full relative">
                             <!-- Answer Content Overlay -->
                             <div class="answer-content">
-                                <div id="answer-container" class="answer-text-area bg-white bg-opacity-95 rounded-xl p-4 text-center shadow-lg">
-                                    <div id="result-status" class="result-status text-lg font-bold mb-4"></div>
-                                    <div id="user-choice" class="user-choice mb-3 text-sm"></div>
-                                    <div id="correct-answer" class="correct-answer mb-3 text-sm hidden"></div>
-                                    <div id="explanation" class="explanation text-xs mt-4 pt-4 border-t hidden"></div>
+                                <div id="answer-container" class="answer-text-area">
+                                    <div id="result-status" class="result-status"></div>
+                                    <div id="user-choice" class="user-choice"></div>
+                                    <div id="correct-answer" class="correct-answer hidden"></div>
+                                    <div id="explanation" class="explanation hidden"></div>
                                 </div>
                             </div>
                         </div>
@@ -103,13 +103,8 @@
 
         <!-- Action Buttons (now outside cards-container) -->
         <div id="action-buttons" class="flex justify-center gap-4 mt-6 hidden">
-            <button id="submit-btn"
-                class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg transition-all text-lg">
+            <button id="submit-btn" class="gradient-primary text-white px-4 py-2 rounded-2xl text-sm font-semibold shadow-lg transition-all">
                 Υποβολή
-            </button>
-            <button id="next-btn"
-                class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-lg transition-all text-lg">
-                Επόμενη
             </button>
         </div>
     </div>

@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Custom Properties */
+:root {
+  /* Glass Container Base */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+  --glass-blur: blur(12px);
+
+  /* Text Colors */
+  --text-primary: #1a365d;
+  --text-blue: #1e3a8a;
+
+  /* Button Colors */
+  --btn-primary: #235789;
+  --btn-primary-hover: #1d466b;
+  --btn-blue: #2563eb;
+  --btn-blue-hover: #1d4ed8;
+  --btn-green: #16a34a;
+  --btn-green-hover: #15803d;
+
+  /* State Colors */
+  --hover-bg: rgba(239, 246, 255, 0.65);
+  --hover-border: rgba(147, 197, 253, 0.8);
+  --selected-bg: rgba(255, 237, 213, 0.65);
+  --selected-border: rgba(251, 146, 60, 0.8);
+  --selected-text: #9a3412;
+  --correct-bg: rgba(220, 252, 231, 0.65);
+  --correct-border: rgba(74, 222, 128, 0.8);
+  --correct-text: #14532d;
+  --wrong-bg: rgba(254, 226, 226, 0.65);
+  --wrong-border: rgba(248, 113, 113, 0.8);
+  --wrong-text: #7f1d1d;
+}
+
 /* Essential Component Classes */
 @layer components {
   /* Category Button */
@@ -104,38 +138,51 @@
     bottom: 20%;
   }
 
+  /* Unified Glass Text Containers */
+  .question-text-area,
+  .answer-text-area,
+  .choice-button {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    color: var(--text-primary);
+    font-weight: 600;
+    @apply rounded-xl text-center;
+  }
+
   .question-text-area {
-    @apply bg-white bg-opacity-95 border border-blue-100 rounded-xl p-4 mb-8 text-center shadow-lg;
+    @apply p-4 mb-8;
     max-width: 320px;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    color: #2c5aa0;
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
 
   .answer-text-area {
-    @apply bg-white bg-opacity-95 border border-blue-50 rounded-xl p-6 text-center shadow-xl;
+    @apply p-6;
     max-width: 360px;
   }
 
-  /* Choice System */
   .choices-area {
     @apply w-full max-w-xs space-y-2;
   }
 
   .choice-button {
-    @apply w-full bg-white bg-opacity-95 border border-blue-200 rounded-lg p-3 text-left text-sm font-medium text-blue-800 transition-all duration-200 cursor-pointer shadow-sm;
+    @apply w-full p-3 text-sm font-semibold transition-all duration-200 cursor-pointer;
+    color: var(--text-blue);
     min-height: 40px;
-    backdrop-filter: blur(2px);
   }
 
   .choice-button:hover {
-    @apply bg-blue-50 border-blue-300 shadow-md;
+    background: var(--hover-bg);
+    border-color: var(--hover-border);
     transform: translateY(-1px);
   }
 
   .choice-button.selected {
-    @apply bg-orange-50 border-orange-400 text-orange-800;
-    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+    background: var(--selected-bg);
+    border-color: var(--selected-border);
+    color: var(--selected-text);
   }
 
   .choice-button.selected::after {
@@ -144,16 +191,28 @@
   }
 
   .choice-button.correct {
-    @apply bg-green-50 border-green-400 text-green-800;
+    background: var(--correct-bg);
+    border-color: var(--correct-border);
+    color: var(--correct-text);
   }
 
   .choice-button.wrong {
-    @apply bg-red-50 border-red-400 text-red-800;
+    background: var(--wrong-bg);
+    border-color: var(--wrong-border);
+    color: var(--wrong-text);
   }
 
-  /* Answer Display */
+  /* Answer Display Text */
+  .result-status,
+  .user-choice,
+  .correct-answer,
+  .explanation {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
   .result-status {
-    @apply text-base font-semibold text-primary mb-2;
+    @apply text-lg mb-3;
   }
 
   .result-status.correct {
@@ -165,31 +224,58 @@
   }
 
   .user-choice {
-    @apply text-sm text-gray-600 mb-1;
+    @apply text-sm mb-2;
   }
 
   .user-choice::before {
     content: "Η απάντησή σου: ";
-    @apply font-medium text-primary;
   }
 
   .correct-answer {
-    @apply text-sm text-green-700 mb-1;
+    @apply text-sm mb-2;
   }
 
   .correct-answer::before {
     content: "Σωστή απάντηση: ";
-    @apply font-medium;
   }
 
   .explanation {
-    @apply text-xs text-gray-700 mt-2 pt-2;
-    border-top: 1px solid rgba(44,90,160,0.1);
+    @apply text-sm mt-3 pt-3;
+    border-top: 1px solid rgba(44,90,160,0.2);
+  }
+
+  /* Unified Button Styles */
+  .btn {
+    @apply px-6 py-3 rounded-xl font-semibold shadow-lg transition-all text-white;
+  }
+
+  .btn-primary {
+    background: var(--btn-primary);
+  }
+
+  .btn-primary:hover {
+    background: var(--btn-primary-hover);
+  }
+
+  .btn-blue {
+    background: var(--btn-blue);
+  }
+
+  .btn-blue:hover {
+    background: var(--btn-blue-hover);
+  }
+
+  .btn-green {
+    background: var(--btn-green);
+  }
+
+  .btn-green:hover {
+    background: var(--btn-green-hover);
   }
 
   /* Gradient Components */
   .gradient-primary {
-    background: linear-gradient(135deg, #235789, #1d466b);
+    background: linear-gradient(135deg, var(--btn-primary), var(--btn-primary-hover));
   }
 
   .gradient-summary {

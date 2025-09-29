@@ -146,17 +146,20 @@ function displayQuestion(index) {
         document.querySelector('.question-section').classList.remove('active');
         document.querySelector('.answer-section').classList.add('active');
         updateAnswer(q, answered.chosenIndex);
-        
-        // Show next button, hide submit button for answered questions
+
+        // Change submit button to next button for answered questions
         const submitBtn = document.getElementById('submit-btn');
-        const nextBtn = document.getElementById('next-btn');
         if (submitBtn) {
-            submitBtn.style.display = 'none';
-            submitBtn.disabled = true;
-        }
-        if (nextBtn) {
-            nextBtn.style.display = 'inline-block';
-            nextBtn.disabled = false;
+            submitBtn.textContent = 'Επόμενη';
+            submitBtn.disabled = false;
+            submitBtn.onclick = () => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex >= questions.length) {
+                    showSessionSummary(true);
+                } else {
+                    displayQuestion(currentQuestionIndex);
+                }
+            };
         }
     } else {
         const card3d = document.getElementById('card3d');
@@ -164,16 +167,12 @@ function displayQuestion(index) {
         document.querySelector('.question-section').classList.add('active');
         document.querySelector('.answer-section').classList.remove('active');
         setTimeout(() => {
-            // Reset external buttons for unanswered questions
+            // Reset submit button for unanswered questions
             const submitBtn = document.getElementById('submit-btn');
-            const nextBtn = document.getElementById('next-btn');
             if (submitBtn) {
                 submitBtn.style.display = 'none';
                 submitBtn.disabled = true;
-            }
-            if (nextBtn) {
-                nextBtn.style.display = 'none';
-                nextBtn.disabled = true;
+                submitBtn.textContent = 'Υποβολή';
             }
         }, 100);
     }
@@ -218,6 +217,7 @@ function updateQuestion(q) {
         // Set up external submit button
         const externalSubmitBtn = document.getElementById('submit-btn');
         if (externalSubmitBtn) {
+            externalSubmitBtn.textContent = 'Υποβολή';
             externalSubmitBtn.style.display = 'none';
             externalSubmitBtn.disabled = true;
             externalSubmitBtn.onclick = () => {
@@ -246,11 +246,11 @@ function updateAnswer(q, chosenOriginalIndex) {
     }
     
     if (userChoice) {
-        userChoice.innerHTML = `<strong>Η επιλογή σου:</strong> ${q.choices[chosenOriginalIndex]}`;
+        userChoice.textContent = q.choices[chosenOriginalIndex];
     }
-    
+
     if (correctAnswer && !correct) {
-        correctAnswer.innerHTML = `<strong>Σωστή απάντηση:</strong> ${q.choices[q.correctIndex]}`;
+        correctAnswer.textContent = q.choices[q.correctIndex];
         correctAnswer.classList.remove('hidden');
     } else if (correctAnswer) {
         correctAnswer.classList.add('hidden');
@@ -263,12 +263,13 @@ function updateAnswer(q, chosenOriginalIndex) {
         explanation.classList.add('hidden');
     }
     
-    // Set up external next button
-    const externalNextBtn = document.getElementById('next-btn');
-    if (externalNextBtn) {
-        externalNextBtn.style.display = 'inline-block';
-        externalNextBtn.disabled = false;
-        externalNextBtn.onclick = () => {
+    // Change submit button to next button after answering
+    const externalSubmitBtn = document.getElementById('submit-btn');
+    if (externalSubmitBtn) {
+        externalSubmitBtn.textContent = 'Επόμενη';
+        externalSubmitBtn.style.display = 'inline-block';
+        externalSubmitBtn.disabled = false;
+        externalSubmitBtn.onclick = () => {
             currentQuestionIndex++;
             if (currentQuestionIndex >= questions.length) {
                 showSessionSummary(true);
@@ -276,13 +277,6 @@ function updateAnswer(q, chosenOriginalIndex) {
                 displayQuestion(currentQuestionIndex);
             }
         };
-    }
-    
-    // Hide submit button after answering
-    const externalSubmitBtn = document.getElementById('submit-btn');
-    if (externalSubmitBtn) {
-        externalSubmitBtn.style.display = 'none';
-        externalSubmitBtn.disabled = true;
     }
 }
 
@@ -331,8 +325,8 @@ function renderAnswerReview(q, chosenOriginalIndex, container) {
     const correct = q.correctIndex === chosenOriginalIndex;
     container.innerHTML = '';
     const userDiv = document.createElement('div');
-    userDiv.className = 'user-answer';
-    userDiv.innerHTML = `<strong>${correct ? 'Σωστό!' : 'Λάθος.'}</strong><br>Η επιλογή σου: ${q.choices[chosenOriginalIndex]}<br>`;
+    userDiv.className = 'user-choice';
+    userDiv.textContent = q.choices[chosenOriginalIndex];
     const explain = document.createElement('div');
     explain.style.marginTop = '6px';
     explain.textContent = q.explanation || '';
