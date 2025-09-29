@@ -4,21 +4,34 @@
 This is a static web project consisting of HTML, CSS, SVG images, and a JSON file. It appears to be an educational or quiz-style site, likely focused on grammar and syntax.  
 It follows modern software development best practices with emphasis on clean code, security, and maintainability.
 
+## Architecture: SVG Backgrounds with HTML Overlays
+**Important:** This project uses a **SVG background architecture** where SVG images serve as CSS backgrounds with HTML content overlaid on top:
+
+- **SVG files** (`grammar_a.svg`, `grammar_q.svg`, `syntax_a.svg`, `syntax_q.svg`) are used as **CSS background-images**
+- **HTML elements** with overlay classes (`.question-area`, `.answer-area`) position content **over** the SVG backgrounds
+- **No SVG foreign objects** or embedded HTML inside SVG elements
+- **3D card flipping** animation is preserved using CSS transforms on the HTML container
+
+This approach provides better accessibility, easier content management, and consistent styling while maintaining the visual design.
+
 ## Key Files and Structure
-- `index.html`: Main entry point. Loads the UI and references other assets.
-- `styles.css`: Contains all styling for the site.
+- `index.html`: Main entry point. Uses card-background divs with SVG backgrounds and HTML overlay content areas.
+- `styles.css`: Contains all styling including SVG background classes (`.card-background`, `.question-bg`, `.answer-bg`).
+- `quiz-app.js`: Quiz logic with direct HTML DOM manipulation (no SVG foreign object access).
 - `questions.json`: Holds quiz or question data.
-- `grammar_a.svg`, `grammar_q.svg`, `syntax_a.svg`, `syntax_q.svg`: SVG images used for visual content.
-- No build system, package manager, or backend code is present.
+- `svg/`: SVG background images for different categories and states.
+- `tailwind.config.js`: Tailwind CSS configuration with custom component layers.
+- `package.json`: Dependencies and build scripts for Tailwind CSS compilation.
 
 ## Patterns and Conventions
-- All logic is expected inlined or referenced via `<script>` in `index.html`.
+- **SVG Background Pattern**: Use `<div class="card-background question-bg">` with content areas for overlays
+- **Direct DOM Manipulation**: Update HTML elements directly, not SVG foreign objects
 - Data-driven: content stored in `questions.json`.
-- SVGs follow naming (`*_q.svg`, `*_a.svg`).
+- SVGs follow naming (`*_q.svg`, `*_a.svg`) and serve as pure background images.
 - Separation of concerns:  
     - Data (`questions.json`)  
-    - Visuals (SVGs)  
-    - Logic/UI (`index.html`, `styles.css`)
+    - Visual Backgrounds (`svg/` directory)  
+    - Content Overlays & Logic (`index.html`, `styles.css`, `quiz-app.js`)
 
 ### CSS & Layout (Tailwind)
 - Prefer using **Tailwind CSS** for utility-first styling. For small/quick previews you may use the Tailwind CDN, but for production add Tailwind as a dev dependency and build a compiled stylesheet.

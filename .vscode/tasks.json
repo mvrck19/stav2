@@ -6,7 +6,15 @@
       "type": "shell",
       "command": "npm",
       "args": ["run", "build-css-prod"],
-      "group": "build"
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      },
+      "problemMatcher": []
     },
     {
       "label": "Watch Tailwind CSS",
@@ -15,21 +23,90 @@
       "args": ["run", "build-css"],
       "isBackground": true,
       "group": "build",
-      "problemMatcher": "$tsc-watch"
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "."
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*Rebuilding.*$",
+          "endsPattern": "^.*Done in.*ms$"
+        }
+      }
     },
     {
-      "label": "Test",
+      "label": "Start Dev Server",
+      "type": "shell", 
+      "command": "npm",
+      "args": ["run", "dev"],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Server",
+      "type": "shell",
+      "command": "npm", 
+      "args": ["start"],
+      "isBackground": true,
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Tests",
       "type": "shell",
       "command": "npm",
       "args": ["test"],
-      "group": "test"
+      "group": {
+        "kind": "test", 
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
     },
     {
-      "label": "Test UI",
+      "label": "Run Tests UI",
       "type": "shell",
       "command": "npm",
       "args": ["run", "test:ui"],
-      "group": "test"
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Serve (Watch CSS)",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "Watch Tailwind CSS",
+        "Start Server"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ]
 }
