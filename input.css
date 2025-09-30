@@ -128,6 +128,8 @@
     right: 10%;
     bottom: 15%;
     justify-content: space-between;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .answer-content {
@@ -136,6 +138,8 @@
     left: 10%;
     right: 10%;
     bottom: 20%;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   /* Unified Glass Text Containers */
@@ -304,14 +308,14 @@
     top: 35%;
     left: 8%;
     right: 8%;
-    bottom: 12%;
+    bottom: 15%;
   }
 
   .answer-content {
     top: 25%;
     left: 8%;
     right: 8%;
-    bottom: 18%;
+    bottom: 20%;
   }
 
   .question-text-area {
