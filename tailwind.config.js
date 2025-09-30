@@ -7,8 +7,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'primary': '#235789',
-        'primary-dark': '#1a4266',
+        // Palette from palette.txt
+        'white': '#FFFFFF',
+        'timberwolf': '#D7D8D7',
+        'indigo': '#244B6B',
+        'nyanza': '#CDDDC5',
+        'olivine': '#ACC499',
+        // Legacy compatibility
+        'primary': '#244B6B',
+        'primary-dark': '#1d3c56',
       },
       fontFamily: {
         'sans': ['Arial', 'sans-serif'],

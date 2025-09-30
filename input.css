@@ -2,38 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Custom Properties */
+/* CSS Custom Properties - Based on palette.txt and grammar_palette.txt */
 :root {
+  /* Shared Palette Colors */
+  --color-white: #FFFFFF;
+  --color-timberwolf: #D7D8D7;
+  --color-indigo: #244B6B;
+  --color-nyanza: #CDDDC5;
+
+  /* Category-Specific Accent Colors */
+  --color-olivine: #ACC499;      /* Syntax - Olive green */
+  --color-cadet-gray: #99A8B5;   /* Grammar - Cadet gray */
+
   /* Glass Container Base */
   --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.6);
-  --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+  --glass-border: rgba(215, 216, 215, 0.6);
+  --glass-shadow: 0 8px 32px rgba(36, 75, 107, 0.15);
   --glass-blur: blur(12px);
 
   /* Text Colors */
-  --text-primary: #1a365d;
-  --text-blue: #1e3a8a;
+  --text-primary: #244B6B;  /* Indigo dye */
+  --text-secondary: #ACC499;  /* Default: Olivine for syntax */
 
   /* Button Colors */
-  --btn-primary: #235789;
-  --btn-primary-hover: #1d466b;
-  --btn-blue: #2563eb;
-  --btn-blue-hover: #1d4ed8;
-  --btn-green: #16a34a;
-  --btn-green-hover: #15803d;
+  --btn-primary: #244B6B;  /* Indigo dye */
+  --btn-primary-hover: #1d3c56;  /* Darker indigo */
+  --btn-secondary: #ACC499;  /* Olivine */
+  --btn-secondary-hover: #88aa6b;  /* Darker olivine */
 
-  /* State Colors */
-  --hover-bg: rgba(239, 246, 255, 0.65);
-  --hover-border: rgba(147, 197, 253, 0.8);
-  --selected-bg: rgba(255, 237, 213, 0.65);
-  --selected-border: rgba(251, 146, 60, 0.8);
-  --selected-text: #9a3412;
-  --correct-bg: rgba(220, 252, 231, 0.65);
-  --correct-border: rgba(74, 222, 128, 0.8);
-  --correct-text: #14532d;
-  --wrong-bg: rgba(254, 226, 226, 0.65);
-  --wrong-border: rgba(248, 113, 113, 0.8);
-  --wrong-text: #7f1d1d;
+  /* Default State Colors (Syntax - Olivine) */
+  --hover-bg: rgba(232, 233, 232, 0.75);  /* Light Timberwolf */
+  --hover-border: rgba(172, 196, 153, 0.8);  /* Olivine with opacity */
+  --selected-bg: rgba(172, 196, 153, 0.75);  /* Olivine with higher opacity */
+  --selected-border: rgba(172, 196, 153, 0.9);
+  --selected-text: #244B6B;  /* Indigo */
+  --correct-bg: rgba(205, 221, 197, 0.75);  /* Nyanza */
+  --correct-border: rgba(172, 196, 153, 0.9);  /* Olivine */
+  --correct-text: #244B6B;  /* Indigo */
+  --wrong-bg: rgba(215, 216, 215, 0.75);  /* Timberwolf */
+  --wrong-border: rgba(215, 216, 215, 0.9);
+  --wrong-text: #244B6B;  /* Indigo */
 }
 
 /* Essential Component Classes */
@@ -204,6 +212,24 @@
     background: var(--wrong-bg);
     border-color: var(--wrong-border);
     color: var(--wrong-text);
+  }
+
+  /* Grammar Category - Cadet Gray State Colors */
+  .grammar .choice-button:hover {
+    background: rgba(232, 233, 232, 0.75);  /* Light Timberwolf */
+    border-color: rgba(153, 168, 181, 0.8);  /* Cadet gray */
+  }
+
+  .grammar .choice-button.selected {
+    background: rgba(153, 168, 181, 0.75);  /* Cadet gray */
+    border-color: rgba(153, 168, 181, 0.9);
+    color: #244B6B;  /* Indigo */
+  }
+
+  .grammar .choice-button.correct {
+    background: rgba(205, 221, 197, 0.75);  /* Nyanza */
+    border-color: rgba(153, 168, 181, 0.9);  /* Cadet gray */
+    color: #244B6B;  /* Indigo */
   }
 
   /* Answer Display Text */

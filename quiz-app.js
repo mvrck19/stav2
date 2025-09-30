@@ -99,13 +99,22 @@ function startCategory(id) {
     const backBtn = document.getElementById('backToCategories');
     if (backBtn) backBtn.style.display = 'flex';
     document.getElementById('category-screen').style.display = 'none';
-    document.getElementById('cards-container').style.display = 'block';
+    const cardsContainer = document.getElementById('cards-container');
+    cardsContainer.style.display = 'block';
+
+    // Apply category-specific class for styling
+    if (id === 'grammar') {
+        cardsContainer.classList.add('grammar');
+    } else {
+        cardsContainer.classList.remove('grammar');
+    }
+
     document.getElementById('action-buttons').style.display = 'flex';
-    
+
     // Set background SVGs for the new structure
     const questionCard = document.getElementById('question-card');
     const answerCard = document.getElementById('answer-card');
-    
+
     if (questionCard && answerCard) {
         // Remove old category classes
         questionCard.className = questionCard.className.replace(/\b(syntax|grammar)\b/g, '');

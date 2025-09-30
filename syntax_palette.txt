@@ -1,0 +1,35 @@
+/* Coolors Exported Palette - https://coolors.co/ffffff-d7d8d7-244b6b-cdddc5-acc499 */
+
+- Tailwind
+
+{ 'white': { DEFAULT: '#FFFFFF', 100: '#333333', 200: '#666666', 300: '#999999', 400: '#cccccc', 500: '#ffffff', 600: '#ffffff', 700: '#ffffff', 800: '#ffffff', 900: '#ffffff' }, 'timberwolf': { DEFAULT: '#D7D8D7', 100: '#2b2c2b', 200: '#565856', 300: '#818381', 400: '#adaead', 500: '#d7d8d7', 600: '#e0e1e0', 700: '#e8e8e8', 800: '#f0f0f0', 900: '#f7f7f7' }, 'indigo_dye': { DEFAULT: '#244B6B', 100: '#070f15', 200: '#0e1e2b', 300: '#152d40', 400: '#1d3c56', 500: '#244b6b', 600: '#3672a2', 700: '#5a96c8', 800: '#91b9da', 900: '#c8dced' }, 'nyanza': { DEFAULT: '#CDDDC5', 100: '#26351f', 200: '#4c693e', 300: '#739e5d', 400: '#a0be90', 500: '#cdddc5', 600: '#d7e4d1', 700: '#e1ebdc', 800: '#ebf1e8', 900: '#f5f8f3' }, 'olivine': { DEFAULT: '#ACC499', 100: '#222c19', 200: '#435833', 300: '#65844c', 400: '#88aa6b', 500: '#acc499', 600: '#bccfac', 700: '#cddbc1', 800: '#dde7d6', 900: '#eef3ea' } }
+
+- CSV
+
+FFFFFF,D7D8D7,244B6B,CDDDC5,ACC499
+
+- With #
+
+#FFFFFF, #D7D8D7, #244B6B, #CDDDC5, #ACC499
+
+- Array
+
+["FFFFFF","D7D8D7","244B6B","CDDDC5","ACC499"]
+
+- Object
+
+{"White":"FFFFFF","Timberwolf":"D7D8D7","Indigo dye":"244B6B","Nyanza":"CDDDC5","Olivine":"ACC499"}
+
+- Extended Array
+
+[{"name":"White","hex":"FFFFFF","rgb":[255,255,255],"cmyk":[0,0,0,0],"hsb":[0,0,100],"hsl":[0,0,100],"lab":[100,0,0]},{"name":"Timberwolf","hex":"D7D8D7","rgb":[215,216,215],"cmyk":[0,0,0,15],"hsb":[120,0,85],"hsl":[120,1,85],"lab":[86,-1,0]},{"name":"Indigo dye","hex":"244B6B","rgb":[36,75,107],"cmyk":[66,30,0,58],"hsb":[207,66,42],"hsl":[207,50,28],"lab":[31,-3,-23]},{"name":"Nyanza","hex":"CDDDC5","rgb":[205,221,197],"cmyk":[7,0,11,13],"hsb":[100,11,87],"hsl":[100,26,82],"lab":[86,-10,10]},{"name":"Olivine","hex":"ACC499","rgb":[172,196,153],"cmyk":[12,0,22,23],"hsb":[93,22,77],"hsl":[93,27,68],"lab":[76,-16,19]}]
+
+- XML
+
+<palette>
+  <color name="White" hex="FFFFFF" r="255" g="255" b="255" />
+  <color name="Timberwolf" hex="D7D8D7" r="215" g="216" b="215" />
+  <color name="Indigo dye" hex="244B6B" r="36" g="75" b="107" />
+  <color name="Nyanza" hex="CDDDC5" r="205" g="221" b="197" />
+  <color name="Olivine" hex="ACC499" r="172" g="196" b="153" />
+</palette>

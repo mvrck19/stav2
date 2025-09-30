@@ -9,33 +9,78 @@ All styles are defined in `input.css` using:
 - **Tailwind's `@layer components`** for reusable component classes
 - **Direct CSS properties** to avoid Tailwind utility conflicts
 
+## Color Palette
+
+**Sources**:
+- `palette.txt` - Syntax category palette
+- `grammar_palette.txt` - Grammar category palette (with Cadet Gray instead of Olivine)
+
+### Shared Colors
+
+| Name | Hex | RGB | Usage |
+|------|-----|-----|-------|
+| **White** | `#FFFFFF` | rgb(255, 255, 255) | Base backgrounds |
+| **Timberwolf** | `#D7D8D7` | rgb(215, 216, 215) | Neutral/wrong states |
+| **Indigo dye** | `#244B6B` | rgb(36, 75, 107) | Primary brand, text, buttons |
+| **Nyanza** | `#CDDDC5` | rgb(205, 221, 197) | Success/correct states |
+
+### Category-Specific Accent Colors
+
+| Category | Color Name | Hex | RGB | Usage |
+|----------|-----------|-----|-----|-------|
+| **Syntax** | Olivine | `#ACC499` | rgb(172, 196, 153) | Hover, selected states |
+| **Grammar** | Cadet Gray | `#99A8B5` | rgb(153, 168, 181) | Hover, selected states |
+
+### Palette CSS Variables
+```css
+/* Shared */
+--color-white: #FFFFFF;
+--color-timberwolf: #D7D8D7;
+--color-indigo: #244B6B;
+--color-nyanza: #CDDDC5;
+
+/* Category-Specific */
+--color-olivine: #ACC499;      /* Syntax */
+--color-cadet-gray: #99A8B5;   /* Grammar */
+```
+
 ## Design Tokens
 
 ### Glass Morphism
 ```css
 --glass-bg: rgba(255, 255, 255, 0.65);
---glass-border: rgba(255, 255, 255, 0.6);
---glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+--glass-border: rgba(215, 216, 215, 0.6);  /* Timberwolf */
+--glass-shadow: 0 8px 32px rgba(36, 75, 107, 0.15);  /* Indigo */
 --glass-blur: blur(12px);
 ```
 
 ### Text Colors
 ```css
---text-primary: #1a365d;  /* Dark blue for primary text */
---text-blue: #1e3a8a;     /* Blue for interactive text */
+--text-primary: #244B6B;    /* Indigo dye */
+--text-secondary: #ACC499;  /* Olivine */
 ```
 
 ### Button Colors
 ```css
---btn-primary: #235789;
---btn-primary-hover: #1d466b;
+--btn-primary: #244B6B;         /* Indigo dye */
+--btn-primary-hover: #1d3c56;   /* Darker indigo */
+--btn-secondary: #ACC499;       /* Olivine */
+--btn-secondary-hover: #88aa6b; /* Darker olivine */
 ```
 
 ### State Colors
-- **Hover**: `rgba(239, 246, 255, 0.65)`
-- **Selected**: `rgba(255, 237, 213, 0.65)` with `#9a3412` text
-- **Correct**: `rgba(220, 252, 231, 0.65)` with `#14532d` text
-- **Wrong**: `rgba(254, 226, 226, 0.65)` with `#7f1d1d` text
+
+**Syntax (default):**
+- **Hover**: Nyanza `rgba(205, 221, 197, 0.65)` with Olivine border
+- **Selected**: Olivine `rgba(172, 196, 153, 0.75)` with Indigo text
+- **Correct**: Nyanza `rgba(205, 221, 197, 0.75)` with Olivine border
+- **Wrong**: Timberwolf `rgba(215, 216, 215, 0.75)` with Indigo text
+
+**Grammar (when `.grammar` class is applied):**
+- **Hover**: Nyanza `rgba(205, 221, 197, 0.65)` with Cadet Gray border
+- **Selected**: Cadet Gray `rgba(153, 168, 181, 0.75)` with Indigo text
+- **Correct**: Nyanza `rgba(205, 221, 197, 0.75)` with Cadet Gray border
+- **Wrong**: Same as syntax
 
 ## Component Patterns
 
