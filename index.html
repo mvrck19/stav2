@@ -11,12 +11,20 @@
 </head>
 
 <body class="font-sans bg-gray-100 flex justify-center p-4 text-xl">
-    <div id="globalScore"
-        class="fixed top-4 right-4 gradient-primary text-white px-4 py-2 rounded-2xl text-sm font-semibold shadow-lg z-[999] flex items-center gap-2 hidden">
-        Points: 0</div>
-    <button id="backToCategories"
-        class="fixed top-4 left-4 gradient-primary text-white px-4 py-2 rounded-2xl text-sm font-semibold shadow-lg z-[999] flex items-center gap-2 transition-all hidden"
-        aria-label="Επιστροφή στις κατηγορίες">← Κατηγορίες</button>
+    <!-- Top Bar -->
+    <div id="topBar" class="top-bar hidden">
+        <div class="top-bar-content">
+            <button id="backToCategories" class="top-bar-item transition-all" aria-label="Επιστροφή στις κατηγορίες">
+                ← Κατηγορίες
+            </button>
+            <div id="progressBarText" class="top-bar-counter">
+                0 / 0
+            </div>
+            <div id="globalScore" class="top-bar-item">
+                Points: 0
+            </div>
+        </div>
+    </div>
 
     <!-- Session Summary Modal -->
     <div id="summaryModal"
@@ -60,12 +68,7 @@
             <div id="categories" class="grid gap-5"></div>
         </div>
         <div id="cards-container"
-            class="w-full perspective-1000 preserve-3d relative hidden flex flex-col items-center my-4">
-            <div class="w-full flex justify-center mb-4">
-                <div id="progressBarText"
-                    class="text-sm text-primary bg-white bg-opacity-90 px-4 py-2 rounded-xl shadow-md font-semibold">
-                    0 / 0</div>
-            </div>
+            class="w-full perspective-1000 preserve-3d relative hidden flex flex-col items-center mt-20">
             <div class="card-3d" id="card3d">
                 <div class="card-inner">
                     <!-- Question Card with SVG Background -->
@@ -102,7 +105,7 @@
         <!-- End cards-container -->
 
         <!-- Action Buttons (now outside cards-container) -->
-        <div id="action-buttons" class="flex justify-center gap-4 -mt-2 hidden">
+        <div id="action-buttons" class="flex justify-center gap-4 mt-2 hidden">
             <button id="submit-btn" class="gradient-primary text-white px-4 py-2 rounded-2xl text-sm font-semibold shadow-lg transition-all">
                 Υποβολή
             </button>

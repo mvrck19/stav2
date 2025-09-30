@@ -90,14 +90,16 @@ function startCategory(id) {
     totalAnswered = 0;
     shuffledChoicesCache = {};
     inReview = false;
-    // show score only in game
+
+    // Show top bar with all elements
+    const topBar = document.getElementById('topBar');
+    if (topBar) topBar.style.display = 'block';
+
     const globalScore = document.getElementById('globalScore');
     if (globalScore) {
-        globalScore.style.display = 'flex';
         globalScore.textContent = 'Points: 0';
     }
-    const backBtn = document.getElementById('backToCategories');
-    if (backBtn) backBtn.style.display = 'flex';
+
     document.getElementById('category-screen').style.display = 'none';
     const cardsContainer = document.getElementById('cards-container');
     cardsContainer.style.display = 'block';
@@ -418,10 +420,10 @@ function hideSummaryAndReturn() {
     document.getElementById('cards-container').style.display = 'none';
     document.getElementById('action-buttons').style.display = 'none';
     document.getElementById('category-screen').style.display = 'block';
-    const globalScore = document.getElementById('globalScore');
-    if (globalScore) globalScore.style.display = 'none';
-    const backBtn = document.getElementById('backToCategories');
-    if (backBtn) backBtn.style.display = 'none';
+
+    // Hide top bar
+    const topBar = document.getElementById('topBar');
+    if (topBar) topBar.style.display = 'none';
     const card3d = document.getElementById('card3d');
     if (card3d) {
         card3d.classList.remove('flipped');
