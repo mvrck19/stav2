@@ -197,10 +197,6 @@
     color: var(--selected-text);
   }
 
-  .choice-button.selected::after {
-    content: '✓';
-    @apply float-right font-bold text-orange-500;
-  }
 
   .choice-button.correct {
     background: var(--correct-bg);
